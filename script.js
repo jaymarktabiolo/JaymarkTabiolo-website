@@ -7,16 +7,23 @@ const navLinks = document.querySelector('.nav-links');
 
 if (menuBtn) {
     menuBtn.addEventListener('click', () => {
-        navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        navLinks.classList.toggle('active');
     });
 }
 
-// Form submission (demo only)
+// Close mobile menu when clicking a link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+    });
+});
+
+// Form submission
 const contactForm = document.querySelector('.contact-form');
 if (contactForm) {
     contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        alert('Thank you! This is a demo form. In a real site, this would send your message.');
+        alert('Thank you for your message! I\'ll get back to you soon.');
         this.reset();
     });
 }
@@ -24,26 +31,21 @@ if (contactForm) {
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
-        e.preventDefault();
         const targetId = this.getAttribute('href');
         if (targetId === '#') return;
         
+        e.preventDefault();
         const targetElement = document.querySelector(targetId);
         if (targetElement) {
             window.scrollTo({
                 top: targetElement.offsetTop - 80,
                 behavior: 'smooth'
             });
-            
-            // Close mobile menu if open
-            if (window.innerWidth <= 992) {
-                navLinks.style.display = 'none';
-            }
         }
     });
 });
 
-// Add animation on scroll (simple version)
+// Add animation on scroll
 const observerOptions = {
     root: null,
     rootMargin: '0px',
@@ -53,20 +55,12 @@ const observerOptions = {
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+            entry.target.classList.add('animated');
         }
     });
 }, observerOptions);
 
 // Observe elements to animate
 document.querySelectorAll('.project-card, .stat-card').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
     observer.observe(el);
 });
-
-// Console greeting (for fun)
-console.log('%c🚀 Website deployed successfully!', 'color: #3b82f6; font-size: 16px; font-weight: bold;');
-console.log('%cMade with HTML, CSS & JavaScript', 'color: #64748b;');
